@@ -316,6 +316,52 @@ class Containability(object):
 
         return len(self.sphere_in_drop_pos)
 
+    def rotation(self, i): #perform rotation
+        # Pivot for rotating the object
+        pivot = self.obj_com_zero
+
+        if i > int(1 * self.simulation_iteration / 10) and i <= int(
+                5 * self.simulation_iteration / 10):
+            orn = p.getQuaternionFromEuler([
+                math.pi / 60 * math.sin(
+                    math.pi * 2 *
+                    (i - int(1 * self.simulation_iteration / 10)) /
+                    int(4 * self.simulation_iteration / 10)), 0, 0
+            ])
+            p.changeConstraint(self.constraint_Id,
+                                pivot,
+                                jointChildFrameOrientation=orn,
+                                maxForce=50)
+        elif i > int(5 * self.simulation_iteration / 10) and i <= int(
+                9 * self.simulation_iteration / 10):
+            orn = p.getQuaternionFromEuler([
+                0, math.pi / 60 *
+                math.sin(math.pi * 2 *
+                            (i - int(5 * self.simulation_iteration / 10))
+                            / int(4 * self.simulation_iteration / 10)), 0
+            ])
+            p.changeConstraint(self.constraint_Id,
+                                pivot,
+                                jointChildFrameOrientation=orn,
+                                maxForce=50)        
+    
+    def translation(self, i): #perform translation
+        if i > int(9 * self.simulation_iteration / 10) and i <= int(
+                9.25 * self.simulation_iteration / 10):
+            p.setGravity(0.5, 0.0, -9.81)
+        elif i > int(
+                9.25 * self.simulation_iteration / 10) and i <= int(
+                    9.5 * self.simulation_iteration / 10):
+            p.setGravity(-0.5, 0.0, -9.81)
+        elif i > int(
+                9.5 * self.simulation_iteration / 10) and i <= int(
+                    9.75 * self.simulation_iteration / 10):
+            p.setGravity(0.0, 0.5, -9.81)
+        elif i > int(
+                9.75 * self.simulation_iteration / 10) and i <= int(
+                    10 * self.simulation_iteration / 10):
+            p.setGravity(0.0, -0.5, -9.81)
+
     def get_containability(self):
         """ 
         Get the containabiliyt of the object by dropping sphere onto the object
@@ -326,9 +372,6 @@ class Containability(object):
 
         ########################### Drop Sphere Into ############################
         force = 1
-
-        # Pivot for rotating the object
-        pivot = self.obj_com_zero
 
         if (self.rotate) and (self.translate):
             print(
@@ -341,47 +384,10 @@ class Containability(object):
                     time.sleep(1. / 240.)
 
                 # Rotation for rotation perturbation
-                if i > int(1 * self.simulation_iteration / 10) and i <= int(
-                        5 * self.simulation_iteration / 10):
-                    orn = p.getQuaternionFromEuler([
-                        math.pi / 60 * math.sin(
-                            math.pi * 2 *
-                            (i - int(1 * self.simulation_iteration / 10)) /
-                            int(4 * self.simulation_iteration / 10)), 0, 0
-                    ])
-                    p.changeConstraint(self.constraint_Id,
-                                       pivot,
-                                       jointChildFrameOrientation=orn,
-                                       maxForce=50)
-                elif i > int(5 * self.simulation_iteration / 10) and i <= int(
-                        9 * self.simulation_iteration / 10):
-                    orn = p.getQuaternionFromEuler([
-                        0, math.pi / 60 *
-                        math.sin(math.pi * 2 *
-                                 (i - int(5 * self.simulation_iteration / 10))
-                                 / int(4 * self.simulation_iteration / 10)), 0
-                    ])
-                    p.changeConstraint(self.constraint_Id,
-                                       pivot,
-                                       jointChildFrameOrientation=orn,
-                                       maxForce=50)
+                self.rotation(i)
 
                 # Horizontal acceleration for translation perturbation
-                if i > int(9 * self.simulation_iteration / 10) and i <= int(
-                        9.25 * self.simulation_iteration / 10):
-                    p.setGravity(0.5, 0.0, -9.81)
-                elif i > int(
-                        9.25 * self.simulation_iteration / 10) and i <= int(
-                            9.5 * self.simulation_iteration / 10):
-                    p.setGravity(-0.5, 0.0, -9.81)
-                elif i > int(
-                        9.5 * self.simulation_iteration / 10) and i <= int(
-                            9.75 * self.simulation_iteration / 10):
-                    p.setGravity(0.0, 0.5, -9.81)
-                elif i > int(
-                        9.75 * self.simulation_iteration / 10) and i <= int(
-                            10 * self.simulation_iteration / 10):
-                    p.setGravity(0.0, -0.5, -9.81)
+                self.translation(i)
 
         elif (not self.rotate) and (self.translate):
             print("Only translation perturbation is activated...")
@@ -392,21 +398,7 @@ class Containability(object):
                     time.sleep(1. / 240.)
 
                 # Horizontal acceleration for translation perturbation
-                if i > int(9 * self.simulation_iteration / 10) and i <= int(
-                        9.25 * self.simulation_iteration / 10):
-                    p.setGravity(0.5, 0.0, -9.81)
-                elif i > int(
-                        9.25 * self.simulation_iteration / 10) and i <= int(
-                            9.5 * self.simulation_iteration / 10):
-                    p.setGravity(-0.5, 0.0, -9.81)
-                elif i > int(
-                        9.5 * self.simulation_iteration / 10) and i <= int(
-                            9.75 * self.simulation_iteration / 10):
-                    p.setGravity(0.0, 0.5, -9.81)
-                elif i > int(
-                        9.75 * self.simulation_iteration / 10) and i <= int(
-                            10 * self.simulation_iteration / 10):
-                    p.setGravity(0.0, -0.5, -9.81)
+                self.translation(i)
 
         elif (self.rotate) and (not self.translate):
             print("Only rotation perturbation is activated...")
@@ -417,30 +409,7 @@ class Containability(object):
                     time.sleep(1. / 240.)
 
                 # 2.0: Shake Objects
-                if i > int(1 * self.simulation_iteration / 10) and i <= int(
-                        5 * self.simulation_iteration / 10):
-                    orn = p.getQuaternionFromEuler([
-                        math.pi / 60 * math.sin(
-                            math.pi * 2 *
-                            (i - int(1 * self.simulation_iteration / 10)) /
-                            int(4 * self.simulation_iteration / 10)), 0, 0
-                    ])
-                    p.changeConstraint(self.constraint_Id,
-                                       pivot,
-                                       jointChildFrameOrientation=orn,
-                                       maxForce=50)
-                elif i > int(5 * self.simulation_iteration / 10) and i <= int(
-                        9 * self.simulation_iteration / 10):
-                    orn = p.getQuaternionFromEuler([
-                        0, math.pi / 60 *
-                        math.sin(math.pi * 2 *
-                                 (i - int(5 * self.simulation_iteration / 10))
-                                 / int(4 * self.simulation_iteration / 10)), 0
-                    ])
-                    p.changeConstraint(self.constraint_Id,
-                                       pivot,
-                                       jointChildFrameOrientation=orn,
-                                       maxForce=50)
+                self.rotation(i)
 
         elif (not self.rotate) and (not self.translate):
             print("No perturbations are activated...")
