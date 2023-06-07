@@ -1,4 +1,4 @@
-# Containbility of an object
+# Containability of an object
 
 # Author: Hongtao Wu
 # Institution: Johns Hopkins University
