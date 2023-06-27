@@ -6,3 +6,8 @@ processing/log.txt
 processing/TSDFfusion/build
 
 .vscode/
+data/Amazon_Accessory_Tray_pour_pca/Amazon_Accessory_Tray_pour_pca_mesh_0_contain.mp4
+data/Amazon_Accessory_Tray_pour_pca/Amazon_Accessory_Tray_pour_pca_mesh_0_pour.mp4
+.gitignore
+.gitignore
+data/test2/test2_0_contain.mp4
