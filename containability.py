@@ -118,6 +118,7 @@ class Containability(object):
                 p.STATE_LOGGING_VIDEO_MP4, mp4_file_path)
 
         p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
+        p.configureDebugVisualizer(p.COV_ENABLE_MOUSE_PICKING, 0)
 
         # Reset debug camera postion
         p.resetDebugVisualizerCamera(1.0, 0, -44, [-0.09, -0.1, 1])

@@ -79,6 +79,8 @@ class CupPour(object):
             p.startStateLogging(p.STATE_LOGGING_VIDEO_MP4, mp4_file_path)
 
         p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
+        p.configureDebugVisualizer(p.COV_ENABLE_MOUSE_PICKING, 0)
+
         # Reset debug camera postion
         p.resetDebugVisualizerCamera(0.7, 0, -40, [-0.05, -0.1, 1])
 
